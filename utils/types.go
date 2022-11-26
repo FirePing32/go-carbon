@@ -1,18 +1,8 @@
-package types
+package utils
 
 import (
     "time"
 )
-
-type File struct {
-    Filename  string `json:"filename"`
-    Type      string `json:"type"`
-    Language  string `json:"language"`
-    RawURL    string `json:"raw_url"`
-    Size      int    `json:"size"`
-    Truncated bool   `json:"truncated"`
-    Content   string `json:"content"`
-}
 
 type Response struct {
 	URL        string `json:"url"`
@@ -23,9 +13,7 @@ type Response struct {
 	GitPullURL string `json:"git_pull_url"`
 	GitPushURL string `json:"git_push_url"`
 	HTMLURL    string `json:"html_url"`
-	Files      []struct {
-		File
-	} `json:"files"`
+	Files      map[string]interface{} `json:"files"`
 	Public      bool        `json:"public"`
 	CreatedAt   time.Time   `json:"created_at"`
 	UpdatedAt   time.Time   `json:"updated_at"`
