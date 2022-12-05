@@ -20,8 +20,9 @@ func main() {
         APIUrl := fmt.Sprintf("https://api.github.com/gists/%s", gistId)
         var content = new(utils.Response)
         utils.GetJson(APIUrl, content)
-
-        return c.JSON(content)
+        filename := utils.GetFileName(content.Files)
+        fileContent := content.Files[filename].(map[string]interface{})["content"]
+        return c.JSON(fileContent)
     })
 
     app.Listen(":3000")
