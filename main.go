@@ -4,6 +4,8 @@ import (
     "github.com/gofiber/fiber/v2"
     "github.com/FirePing32/go-carbon/utils"
     "fmt"
+    "log"
+    "encoding/base64"
 )
 
 func main() {
@@ -22,7 +24,16 @@ func main() {
         utils.GetJson(APIUrl, content)
         filename := utils.GetFileName(content.Files)
         fileContent := content.Files[filename].(map[string]interface{})["content"]
-        return c.JSON(fileContent)
+
+        b, err := utils.GenerateImage(fileContent.(string), "#ffffff", "#300a24", 32)
+			if err != nil {
+				log.Println(err)
+				return err
+			}
+
+		str := base64.StdEncoding.EncodeToString(b)
+
+        return c.SendString(str)
     })
 
     app.Listen(":3000")
