@@ -1,20 +1,21 @@
 package utils
 
 import (
+	"bytes"
+	"embed"
 	"encoding/json"
-    "bytes"
 	"fmt"
-	"github.com/golang/freetype"
-    "github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
-    "embed"
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font"
 )
 
 
@@ -71,20 +72,8 @@ func GetFileName(files map[string]interface{}) string {
     return filename
 }
 
-func getFontMap(f string) string {
-	if f == "FreeSans" {
-		return FreeSans
-	} else if f == "FreeMono" {
-		return FreeMono
-	} else if f == "UbuntuMono" {
-		return UbuntuMono
-	}
-	return UbuntuMono
-}
-
 func loadFont(fn string) (*truetype.Font, error) {
-	fontFile := fmt.Sprintf("static/fonts/%s", getFontMap(fn))
-	fontBytes, err := static.ReadFile(fontFile)
+	fontBytes, err := ioutil.ReadFile("static/fonts/UbuntuMono.ttf")
 	if err != nil {
 		return nil, err
 	}

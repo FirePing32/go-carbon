@@ -31,9 +31,12 @@ func main() {
 				return err
 			}
 
-		str := base64.StdEncoding.EncodeToString(b)
+		imgData := base64.StdEncoding.EncodeToString(b)
+        imgMap := map[string]interface{}{
+            "data": imgData,
+        }
 
-        return c.SendString(str)
+        return c.JSON(imgMap)
     })
 
     app.Listen(":3000")
