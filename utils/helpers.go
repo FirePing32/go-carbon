@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"embed"
 	"encoding/json"
 	"fmt"
 	"image"
@@ -31,20 +30,21 @@ var (
 	// fontFile      string
 
 	// go:embed static/*
-	static embed.FS
+	// static embed.FS
 
 	// go:embed views/*
 	// views embed.FS
 )
 
-func GetJson(url string, target interface{}) error {
+func GetJson(url string, target interface{}) (int, error) {
     r, err := http.Get(url)
-    if err != nil {
-        return err
+    if err != nil || r.StatusCode != 200{
+        return r.StatusCode, err
     }
     defer r.Body.Close()
 
-    return json.NewDecoder(r.Body).Decode(target)
+    json.NewDecoder(r.Body).Decode(target)
+	return r.StatusCode, nil
 }
 
 // func AssertType(files interface{}) interface{} {
