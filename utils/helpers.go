@@ -87,8 +87,8 @@ func loadFont(fn string) (*truetype.Font, error) {
 func GenerateImage(textContent string, fgColorHex string, bgColorHex string, fontSize float64) ([]byte, error) {
 
 	fgColor := color.RGBA{0xff, 0xff, 0xff, 0xff}
-	if len(fgColorHex) == 7 {
-		_, err := fmt.Sscanf(fgColorHex, "#%02x%02x%02x", &fgColor.R, &fgColor.G, &fgColor.B)
+	if len(fgColorHex) == 6 {
+		_, err := fmt.Sscanf(fgColorHex, "%02x%02x%02x", &fgColor.R, &fgColor.G, &fgColor.B)
 		if err != nil {
 			log.Println(err)
 			fgColor = color.RGBA{0x2e, 0x34, 0x36, 0xff}
@@ -96,8 +96,8 @@ func GenerateImage(textContent string, fgColorHex string, bgColorHex string, fon
 	}
 
 	bgColor := color.RGBA{0x30, 0x0a, 0x24, 0xff}
-	if len(bgColorHex) == 7 {
-		_, err := fmt.Sscanf(bgColorHex, "#%02x%02x%02x", &bgColor.R, &bgColor.G, &bgColor.B)
+	if len(bgColorHex) == 6 {
+		_, err := fmt.Sscanf(bgColorHex, "%02x%02x%02x", &bgColor.R, &bgColor.G, &bgColor.B)
 		if err != nil {
 			log.Println(err)
 			bgColor = color.RGBA{0x30, 0x0a, 0x24, 0xff}

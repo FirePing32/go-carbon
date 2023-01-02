@@ -5,6 +5,7 @@ import (
     "github.com/FirePing32/go-carbon/utils"
     "fmt"
     "log"
+    "strconv"
     "encoding/base64"
 )
 
@@ -17,8 +18,18 @@ func main() {
         return resp
     })
 
-    app.Get("/:gistid", func(c *fiber.Ctx) error {
-        gistId := c.Params("gistid")
+    app.Get("/api", func(c *fiber.Ctx) error {
+        gistId := c.Query("gistid")
+        fSize := c.Query("fsize")
+        fColor := c.Query("fcolor")
+        bgColor := c.Query("bgcolor")
+        if gistId == "" || fSize == ""|| fColor == "" || bgColor == "" {
+            queryErr := map[string]interface{}{
+                "statusCode": 400,
+                "error": "Missing required fields. See https://github.com/FirePing32/go-carbon for details",
+            }
+            return c.JSON(queryErr)
+        }
         APIUrl := fmt.Sprintf("https://api.github.com/gists/%s", gistId)
         var content = new(utils.Response)
         code, err := utils.GetJson(APIUrl, content)
@@ -26,7 +37,11 @@ func main() {
             filename := utils.GetFileName(content.Files)
             fileContent := content.Files[filename].(map[string]interface{})["content"]
 
-            b, err := utils.GenerateImage(fileContent.(string), "#ffffff", "#300a24", 32)
+            fSize, e := strconv.Atoi(fSize)
+            if e != nil {
+                panic(e)
+            }
+            b, err := utils.GenerateImage(fileContent.(string), fColor, bgColor, float64(fSize))
                 if err != nil {
                     log.Println(err)
                     return err
@@ -34,7 +49,7 @@ func main() {
 
             imgData := base64.StdEncoding.EncodeToString(b)
             imgMap := map[string]interface{}{
-                "data": imgData,
+                "base64Data": imgData,
             }
 
             return c.JSON(imgMap)
