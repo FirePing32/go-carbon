@@ -1,12 +1,14 @@
 package main
 
 import (
-    "github.com/gofiber/fiber/v2"
-    "github.com/FirePing32/go-carbon/utils"
-    "fmt"
-    "log"
-    "strconv"
-    "encoding/base64"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+
+	"github.com/FirePing32/go-carbon/utils"
+	"github.com/gofiber/fiber/v2"
+	// "encoding/base64"
 )
 
 func main() {
@@ -42,17 +44,25 @@ func main() {
                 panic(e)
             }
             b, err := utils.GenerateImage(fileContent.(string), fColor, bgColor, float64(fSize))
-                if err != nil {
-                    log.Println(err)
-                    return err
-                }
-
-            imgData := base64.StdEncoding.EncodeToString(b)
-            imgMap := map[string]interface{}{
-                "base64Data": imgData,
+            if err != nil {
+                log.Println(err)
+                return err
             }
 
-            return c.JSON(imgMap)
+            imgPath, err := utils.CreateTempImage(b)
+            defer os.Remove(imgPath)
+            if err != nil {
+                log.Println(err)
+                return err
+            }
+
+            // imgData := base64.StdEncoding.EncodeToString(b)
+            // imgMap := map[string]interface{}{
+            //     "base64Data": imgData,
+            // }
+
+            return c.SendFile(fmt.Sprintf("./%s", imgPath))
+
         } else {
             resp := map[string]interface{}{
                 "statusCode": code,

@@ -145,3 +145,20 @@ func GenerateImage(textContent string, fgColorHex string, bgColorHex string, fon
 	}
 	return b.Bytes(), nil
 }
+
+func CreateTempImage(baseData []byte) (string, error) {
+	file, err := ioutil.TempFile("tmp", "code")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	r := bytes.NewReader(baseData)
+	im, err := png.Decode(r)
+	if err != nil {
+		panic("Bad png")
+	}
+
+	png.Encode(file, im)
+	return file.Name(), nil
+
+}
