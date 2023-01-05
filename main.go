@@ -8,7 +8,6 @@ import (
 
 	"github.com/FirePing32/go-carbon/utils"
 	"github.com/gofiber/fiber/v2"
-	// "encoding/base64"
 )
 
 func main() {
@@ -55,11 +54,6 @@ func main() {
                 log.Println(err)
                 return err
             }
-
-            // imgData := base64.StdEncoding.EncodeToString(b)
-            // imgMap := map[string]interface{}{
-            //     "base64Data": imgData,
-            // }
 
             return c.SendFile(fmt.Sprintf("./%s", imgPath))
 

@@ -24,18 +24,6 @@ const (
 	UbuntuMono = "UbuntuMono.ttf"
 )
 
-
-var (
-	// configuration models.Config
-	// fontFile      string
-
-	// go:embed static/*
-	// static embed.FS
-
-	// go:embed views/*
-	// views embed.FS
-)
-
 func GetJson(url string, target interface{}) (int, error) {
     r, err := http.Get(url)
     if err != nil || r.StatusCode != 200{
@@ -46,17 +34,6 @@ func GetJson(url string, target interface{}) (int, error) {
     json.NewDecoder(r.Body).Decode(target)
 	return r.StatusCode, nil
 }
-
-// func AssertType(files interface{}) interface{} {
-//     m, ok := files.(map[string]interface{})
-//     if !ok {
-//         return fmt.Errorf("want type map[string]interface{};")
-//     }
-//     for k, v := range m {
-//         fmt.Println(k, "=>", v)
-//     }
-//     return m
-// }
 
 func GetFileName(files map[string]interface{}) string {
     keys := make([]string, 0, len(files))
